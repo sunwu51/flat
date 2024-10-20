@@ -26,7 +26,10 @@ jobs:
 
       - name: Archive Production Artifacts
         run: |
-            cp target/release/jtxt jtxt-{matrix.os}  
+            cp target/release/jtxt jtxt-{matrix.os} 
+            test -e jtxt-ubuntu-20.04 && mv jtxt-ubuntu-20.04 jtxt && zip -r jtxt-linux-x64.zip jtxt
+            test -e jtxt-macos-13 && mv jtxt-macos-13 jtxt && zip -r jtxt-macos-x64.zip jtxt
+            test -e jtxt-macos-14 && mv jtxt-macos-14 jtxt && zip -r jtxt-macor-arm64.zip jtxt
         shell: bash
         
       - name: Upload Artifacts
