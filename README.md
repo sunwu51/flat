@@ -4,6 +4,8 @@
     <p>使用JavaScript语法进行文本处理的工具，来替换awk</p>
 </center>
 
+[![Rust CI](https://github.com/sunwu51/jtxt/actions/workflows/rust.yml/badge.svg)](https://github.com/sunwu51/jtxt/actions/workflows/rust.yml)
+
 ```bash
 $ jtxt 'var it = l.split("]")[2]; console.log(it)' gc.log
 ```
