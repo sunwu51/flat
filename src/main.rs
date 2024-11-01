@@ -67,7 +67,7 @@ fn main() {
     let mut vec = vec![];
     for line in input.lines() {
         let line = line.unwrap();
-        let line = line.replace("'", "\\'");
+        let line = line.replace("\\", "\\\\").replace("'", "\\'");
         vec.push(line.to_string());
         // 先扔到数组里，每200行，处理一次
         if vec.len() == 200 {
