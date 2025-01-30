@@ -56,6 +56,9 @@ fn main() {
             .expect("Eval failed");
     }
 
+    runtime
+        .execute_script("<anon>", format!("function process(l){{ {} }}", js_function))
+        .expect("Eval failed");
     // 逐行读取文件或者管道内容
     let input: Box<dyn BufRead> = if let Some(path) = file_path {
         Box::new(BufReader::new(
@@ -71,11 +74,11 @@ fn main() {
         vec.push(line.to_string());
         // 先扔到数组里，每200行，处理一次
         if vec.len() == 200 {
-            eval(&mut vec, &mut runtime, &js_function);
+            eval(&mut vec, &mut runtime);
         }
     }
     if !vec.is_empty() {
-        eval(&mut vec, &mut runtime, &js_function);
+        eval(&mut vec, &mut runtime);
     }
     // Execute end code if provided
     if let Some(code) = end_code {
@@ -83,7 +86,7 @@ fn main() {
     }
 }
 
-fn eval(vec: &mut Vec<String>, runtime: &mut JsRuntime, js_function: &str) {
+fn eval(vec: &mut Vec<String>, runtime: &mut JsRuntime) {
     let mut func = "var ls = [".to_string();
     for ele in vec.iter() {
         func.push_str("'");
@@ -93,7 +96,7 @@ fn eval(vec: &mut Vec<String>, runtime: &mut JsRuntime, js_function: &str) {
     func.push_str("];");
     vec.clear();
 
-    func.push_str(&format!("ls.forEach(l=>{{ {} }})", js_function));
+    func.push_str("ls.forEach(l=>{process(l)})");
     let func = format!("{{ {} }}", func);
     runtime.execute_script("<anon>", func).expect("Eval failed");
 }
