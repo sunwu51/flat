@@ -1,0 +1,58 @@
+name: js
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      # pkg打包x64版本，打包arm的包有点问题，所以用bun重新打包arm
+      - run: |
+          npm install -g @yao-pkg/pkg
+          pkg -t node22-linux-x64,node22-win-x64,node22-macos-x64,node22-macos-arm64 --out-path target jtxt.js 
+          curl -fsSL https://bun.sh/install | bash
+          ~/.bun/bin/bun build --compile --target=bun-darwin-arm64 ./jtxt.js --outfile target/jtxt-macos-arm64
+      - name: Upload Artifacts1
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          path: |
+            target/jtxt-linux-x64  
+            target/jtxt-macos-arm64  
+            target/jtxt-macos-x64
+            target/jtxt-win-x64.exe
+      
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: ["build"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
