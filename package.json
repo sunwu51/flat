@@ -1,5 +1,17 @@
 {
+  "name": "jtxt",
+  "version": "0.1.7",
+  "description": "A CLI tool like awk but using js grammar instead",
+  "bin": {
+    "jtxt": "jtxt.js"
+  },
+  "author": "Frank",
+  "license": "MIT",
   "dependencies": {
     "commander": "^13.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunwu51/jtxt.git"
   }
 }

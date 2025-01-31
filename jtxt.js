@@ -1,4 +1,6 @@
+#!/usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 const { program } = require('commander');
 
@@ -36,7 +38,6 @@ const processStream = (stream) => {
   beginFunc(ctx, print);
   const rl = readline.createInterface({
     input: stream,
-    output: process.stdout,
     crlfDelay: Infinity // 适用于 \r\n 和 \n 换行符
   });
 
@@ -56,8 +57,18 @@ const processStream = (stream) => {
 
 // 判断处理文件还是标准输入
 if (filename) {
-  const fileStream = fs.createReadStream(filename);
-  processStream(fileStream);
+  try {
+    const filePath = path.resolve(filename);
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.on('error', (err) => {
+      console.error(`Error reading file: ${err.message}`);
+      process.exit(1);
+    });
+    processStream(fileStream);
+  } catch (err) {
+    console.error(`Error processing file path: ${err.message}`);
+    process.exit(1);
+  }
 } else {
   processStream(process.stdin);
 }

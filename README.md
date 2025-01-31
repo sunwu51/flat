@@ -11,26 +11,26 @@ $ jtxt 'var it = l.split("]")[2]; console.log(it)' gc.log
 ```
 
 # Quick Start
-Download from the release, run the binary executable file or `node jtxt.js`
+Download from the release, run the binary executable file or `npm i -g jtxt`
 
-从release中下载二进制文件直接运行即可，或者使用`node jtxt.js`。
+从release中下载二进制文件直接运行即可，或者使用`npm i -g jtxt`。
 
 Usage
+
+注意`logic/end/begin`部分，在windows下需要用`"`而不能用`'`
 ```bash
 $ jtxt -h
-Processes lines of input with JavaScript
-
-Usage: jtxt [OPTIONS] <function> [file]
+Usage: jtxt [options] <logic> [filename]
 
 Arguments:
-  <function>  JavaScript code to process each line, l is the origin string
-  [file]      Path to the input file. If not provided, reads from stdin.
+  logic               处理逻辑的 JavaScript 代码
+  filename            要读取的文件名 (default: null)
 
 Options:
-  -b, --begin <begin>  JavaScript code to execute before processing any lines
-  -e, --end <end>      JavaScript code to execute after processing all lines
-  -h, --help           Print help
-  -V, --version        Print version
+  -V, --version       output the version number
+  -b, --begin <code>  初始化的逻辑代码
+  -e, --end <code>    结束后的逻辑代码
+  -h, --help          display help for command
 ```
 Example with [1.txt](./1.txt)
 ```bash
