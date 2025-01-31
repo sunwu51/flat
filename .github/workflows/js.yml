@@ -19,6 +19,7 @@ jobs:
           node-version: '22.x'
       # pkg打包x64版本，打包arm的包有点问题，所以用bun重新打包arm
       - run: |
+          npm i
           npm install -g @yao-pkg/pkg
           pkg -t node22-linux-x64,node22-win-x64,node22-macos-x64,node22-macos-arm64 --out-path target jtxt.js 
           curl -fsSL https://bun.sh/install | bash
