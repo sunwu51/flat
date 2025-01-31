@@ -16,23 +16,24 @@ const options = program.opts();
 const logic = program.args[0];
 const filename = program.args[1];
 
-var begin_func = function(){}, end_func = function(){}, 
-    process_func = new Function('l', 'ctx', logic);
+var beginFunc = function(){}, endFunc = function(){}, 
+    processFunc = new Function('l', 'ctx', 'print', logic);
 if (options.begin) {
-    begin_func = new Function('ctx', options.begin);
+    beginFunc = new Function('ctx', 'print', options.begin);
 }
 if (options.end) {
-    end_func = new Function('ctx', options.end);
+    endFunc = new Function('ctx', 'print', options.end);
 }
 
 // 预定义全局变量
 var ctx = {
     n1: 0, n2: 0, n3: 0, s: '', arr: []
 };
+var print = console.log;
 
 // 处理文件或标准输入
 const processStream = (stream) => {
-  begin_func(ctx);
+  beginFunc(ctx, print);
   const rl = readline.createInterface({
     input: stream,
     output: process.stdout,
@@ -42,7 +43,7 @@ const processStream = (stream) => {
 
   rl.on('line', (line) => {
     try {
-        process_func(line, ctx);
+        processFunc(line, ctx, print);
     } catch (error) {
         console.error('Error processing line:', error);
     }
@@ -50,7 +51,7 @@ const processStream = (stream) => {
 
   rl.on('close', () => {
     // 执行结束逻辑
-    end_func(ctx);
+    endFunc(ctx, print);
   });
 };
 
