@@ -37,7 +37,6 @@ const processStream = (stream) => {
   const rl = readline.createInterface({
     input: stream,
     output: process.stdout,
-    terminal: false,
     crlfDelay: Infinity // 适用于 \r\n 和 \n 换行符
   });
 

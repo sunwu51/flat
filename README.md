@@ -13,7 +13,7 @@ $ jtxt 'var it = l.split("]")[2]; console.log(it)' gc.log
 # Quick Start
 Download from the release, run the binary executable file or `node jtxt.js`
 
-从release中下载二进制文件直接运行即可，或者使用`node jtxt.js`
+从release中下载二进制文件直接运行即可，或者使用`node jtxt.js`。
 
 Usage
 ```bash
