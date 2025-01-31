@@ -21,9 +21,11 @@ jobs:
       - run: |
           npm i
           npm install -g @yao-pkg/pkg
-          pkg -t node22-linux-x64,node22-win-x64,node22-macos-x64,node22-macos-arm64 --out-path target jtxt.js 
+          pkg -t node22-linux-x64 -o target/jtxt-linux-64 jtxt.js 
           curl -fsSL https://bun.sh/install | bash
+          ~/.bun/bin/bun build --compile --target=bun-darwin-x64 ./jtxt.js --outfile target/jtxt-macos-x64
           ~/.bun/bin/bun build --compile --target=bun-darwin-arm64 ./jtxt.js --outfile target/jtxt-macos-arm64
+          ~/.bun/bin/bun build --compile --target=bun-windows-x64 ./jtxt.js --outfile target/jtxt-win-x64
       - name: Upload Artifacts1
         uses: actions/upload-artifact@v4
         with:
